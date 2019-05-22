@@ -25,7 +25,7 @@ public class DispatcherServlet extends GenericServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        new ClassPathXmlApplicationContext("spring.xml");
+        context = new ClassPathXmlApplicationContext("spring.xml");
     }
 
     @Override
@@ -47,8 +47,8 @@ public class DispatcherServlet extends GenericServlet {
 
         Object obj = context.getBean(beanName);
         try {
-            Method method = obj.getClass().getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
-            method.invoke(obj, request, response);
+            Method method = obj.getClass().getDeclaredMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
+            method.invoke(obj,request,response);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
